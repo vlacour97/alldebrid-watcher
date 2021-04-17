@@ -1,0 +1,32 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "babel-eslint": "^10.1.0",
+    "events": "^3.3.0",
+    "form-data": "^4.0.0",
+    "fs": "^0.0.1-security",
+    "node-watch": "^0.7.1",
+    "pushover-notifications": "^1.2.2",
+    "request": "^2.88.2",
+    "request-progress": "^3.0.0",
+    "terminal-kit": "^2.0.7",
+    "urlencode": "^1.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.24.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1"
+  }
+}
