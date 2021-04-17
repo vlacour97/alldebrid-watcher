@@ -10,7 +10,7 @@ Put torrent file in folder. The file was download with alldebrid automatically.
 ### Launching script with npm
 
 ``` bash
-git clone ...
+git clone https://github.com/vlacour97/alldebrid-watcher.git
 npm install 
 ALLDEBRID_TOKEN=allbredid-token npm run start
 ```
@@ -23,7 +23,7 @@ ALLDEBRID_TOKEN=allbredid-token  TORRENT_FOLDER=path/to/torrents DOWNLOAD_FOLDER
 ### Launching script with yarn
 
 ``` bash
-git clone ...
+git clone https://github.com/vlacour97/alldebrid-watcher.git
 yarn install 
 ALLDEBRID_TOKEN=allbredid-token yarn start
 ```
@@ -35,7 +35,7 @@ ALLDEBRID_TOKEN=allbredid-token  TORRENT_FOLDER=path/to/torrents DOWNLOAD_FOLDER
 
 ### Launching script with docker
 ``` bash
-docker run -v path/tot/torrent:/torrents -v path/to/download:/downloads -e ALLDEBRID_TOKEN=allbredid-token vlacour/alldebrid-watcher
+docker run -v path/tot/torrent:/torrents -v path/to/download:/downloads -e ALLDEBRID_TOKEN=allbredid-token vlacour97/alldebrid-watcher
 ```
 
 ## Env variables configuration
