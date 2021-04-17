@@ -78,6 +78,10 @@ class Client {
             this.downloadLinks(links)
           }
         })
+        .catch((error) => {
+          this.magnetPoolList = this.magnetPoolList.filter(value => { return value !== magnetId })
+          this.eventEmitter.emit('status_error', error)
+        })
     }
 
     findGoodLinks (links) {
