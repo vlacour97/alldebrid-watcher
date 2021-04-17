@@ -2,13 +2,17 @@ const watch = require('node-watch')
 const Client = require('./src/Client.js')
 const terminal = require('terminal-kit').terminal
 
-const allDebridToken = undefined !== process.env.ALLDEBRID_TOKEN ? process.env.ALLDEBRID_TOKEN : throw new Error('ALLDEBRID_TOKEN env variable is needed')
+const allDebridToken = undefined !== process.env.ALLDEBRID_TOKEN ? process.env.ALLDEBRID_TOKEN : null
 const torrentPath = undefined !== process.env.TORRENT_FOLDER ? process.env.TORRENT_FOLDER : '/torrents'
 const downloadPath = undefined !== process.env.DOWNLOAD_FOLDER ? process.env.DOWNLOAD_FOLDER : '/downloads'
 const authorizedExtension = undefined !== process.env.AUTHORIZED_EXTENSIONS ? process.env.AUTHORIZED_EXTENSIONS.split(',') : null
 const pushOverUserToken = process.env.PUSHOVER_USER_TOKEN ? process.env.PUSHOVER_USER_TOKEN : null
 const pushOverAppToken = process.env.PUSHOVER_APP_TOKEN ? process.env.PUSHOVER_APP_TOKEN : null
 const debugMode = (process.env.DEBUG_MODE === 'true')
+
+if (allDebridToken == null) {
+  throw new Error('ALLDEBRID_TOKEN env variable is needed')
+}
 
 const client = new Client(allDebridToken, downloadPath, authorizedExtension)
 
