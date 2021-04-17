@@ -64,3 +64,6 @@ client.getEventEmitter()
   .on('download_error', (filename) => {
     terminal.red(`Error on download of "${filename}"`)
   })
+  .on('status_error', () => {
+    terminal.red('Error on verify status')
+  })
