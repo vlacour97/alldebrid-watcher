@@ -9,12 +9,13 @@ const authorizedExtension = undefined !== process.env.AUTHORIZED_EXTENSIONS ? pr
 const pushOverUserToken = process.env.PUSHOVER_USER_TOKEN ? process.env.PUSHOVER_USER_TOKEN : null
 const pushOverAppToken = process.env.PUSHOVER_APP_TOKEN ? process.env.PUSHOVER_APP_TOKEN : null
 const debugMode = (process.env.DEBUG_MODE === 'true')
+const maxParallelsDownload = process.env.MAX_PARALLELS_DOWNLOADS ?? Client.DEFAULT_MAX_PARALLELS_DOWNLOADS
 
 if (allDebridToken == null) {
   throw new Error('ALLDEBRID_TOKEN env variable is needed')
 }
 
-const client = new Client(allDebridToken, downloadPath, authorizedExtension)
+const client = new Client(allDebridToken, downloadPath, maxParallelsDownload, authorizedExtension)
 
 watch(torrentPath, { recursive: true }, function (evt, name) {
   if (evt === 'update' && name.match(/.torrent$/)) {
@@ -30,8 +31,14 @@ if (pushOverUserToken && pushOverAppToken) {
   })
   client.getEventEmitter().on('downloaded', (filename) => {
     pusher.send({
-      title: 'File downloaded!',
+      title: 'File downloaded !',
       message: `The file "${filename}" has been downloaded on your server`
+    })
+  })
+  client.getEventEmitter().on('downloaded', (filename) => {
+    pusher.send({
+      title: 'Download started !',
+      message: `The file "${filename}" is being downloaded on your server`
     })
   })
 }
