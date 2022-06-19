@@ -45,6 +45,7 @@ docker run -v path/tot/torrent:/torrents -v path/to/download:/downloads -e ALLDE
 | ALLDEBRID_TOKEN        | -             | Your [AllDebrid](https://alldebrid.fr/) token. This var is needed for running this script                                                                |
 | TORRENT_FOLDER         | /torrents     | The folder path to torrents files                                                                                               |
 | DOWNLOAD_FOLDER        | /downloads    | The folder path to downloads                                                                                                    |
+| MAX_PARALLELS_DOWNLOADS| 5             | The maximum number of files downloaded in parallel (the value 1 corresponds to a synchronous download)                          |
 | AUTHORIZED_EXTENSIONS  | null          | The file extension authorized to download separate by comma (eg: avi,mkv)                                                       |
 | PUSHOVER_USER_TOKEN    | null          | [Pushover](https://pushover.net/) User Token. Set PUSHOVER_USER_TOKEN and PUSHOVER_APP_TOKEN to use pushover app to be notified when download was finish |
 | PUSHOVER_APP_TOKEN     | null          | [Pushover](https://pushover.net/) App Token. Set PUSHOVER_USER_TOKEN and PUSHOVER_APP_TOKEN to use pushover app to be notified when download was finish  |

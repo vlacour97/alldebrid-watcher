@@ -5,20 +5,29 @@ const fs = require('fs')
 const request = require('request')
 const progress = require('request-progress')
 const EventEmitter = require('events')
+const LinkQueue = require('./LinkQueue.js')
 
 class Client {
     static ALL_DEBRID_HOST = 'https://api.alldebrid.com/v4'
     static UPLOAD_MAGNET_URI = '/magnet/upload/file'
     static MAGNET_STATUS_URI = '/magnet/status'
     static LINK_UNLOCK_URI = '/link/unlock'
+    static DEFAULT_MAX_PARALLELS_DOWNLOADS = 5
 
-    constructor (apiKey, downloadPath, authorizedExtensions = null) {
+    constructor (
+      apiKey,
+      downloadPath,
+      maxParallelsDownloads = Client.DEFAULT_MAX_PARALLELS_DOWNLOADS,
+      authorizedExtensions = null
+    ) {
       this.apiKey = apiKey
       this.downloadPath = downloadPath
       this.authorizedExtensions = authorizedExtensions
       this.eventEmitter = new EventEmitter()
       this.magnetPoolList = []
       this.magnetPoolInterval = setInterval(this.verifyPoolStatus.bind(this), 1000)
+      this.downloadInterval = setInterval(this.downloadLinks.bind(this), 1000)
+      this.linkQueue = new LinkQueue(maxParallelsDownloads)
     }
 
     /**
@@ -75,7 +84,7 @@ class Client {
           if (magnets.statusCode === 4) {
             this.magnetPoolList = this.magnetPoolList.filter(value => { return value !== magnetId })
             const links = this.findGoodLinks(magnets.links)
-            this.downloadLinks(links)
+            this.linkQueue.push(links)
           }
         })
         .catch((error) => {
@@ -94,19 +103,19 @@ class Client {
       }
     }
 
-    async downloadLinks (links) {
-      links.forEach(this.downloadLink.bind(this))
+    async downloadLinks () {
+      this.linkQueue.pull().forEach(this.downloadLink.bind(this))
     }
 
     async downloadLink (link) {
       axios.get(this.getUrl(Client.LINK_UNLOCK_URI, { link: link }))
         .then(response => {
           const responseBody = response.data
-          this.downloadFile(responseBody.data.link, responseBody.data.filename)
+          this.downloadFile(responseBody.data.link, responseBody.data.filename, link)
         })
     }
 
-    downloadFile (link, filename) {
+    downloadFile (link, filename, originalLink) {
       const data = {}
       this.eventEmitter.emit('download', filename, link, data)
       progress(request(link))
@@ -114,9 +123,11 @@ class Client {
           this.eventEmitter.emit('downloading', progress, filename, link, data)
         })
         .on('end', () => {
+          this.linkQueue.remove(originalLink)
           this.eventEmitter.emit('downloaded', filename, link, data)
         })
         .on('error', () => {
+          this.linkQueue.remove(originalLink)
           this.eventEmitter.emit('download_error', filename, link, data)
         })
         .pipe(fs.createWriteStream(this.downloadPath + '/' + filename))
