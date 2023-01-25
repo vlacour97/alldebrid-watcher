@@ -118,16 +118,15 @@ class Client {
     downloadFile (link, filename, originalLink) {
       const data = {}
       this.eventEmitter.emit('download', filename, link, data)
+      this.linkQueue.remove(originalLink)
       progress(request(link))
         .on('progress', progress => {
           this.eventEmitter.emit('downloading', progress, filename, link, data)
         })
         .on('end', () => {
-          this.linkQueue.remove(originalLink)
           this.eventEmitter.emit('downloaded', filename, link, data)
         })
         .on('error', () => {
-          this.linkQueue.remove(originalLink)
           this.eventEmitter.emit('download_error', filename, link, data)
         })
         .pipe(fs.createWriteStream(this.downloadPath + '/' + filename))
