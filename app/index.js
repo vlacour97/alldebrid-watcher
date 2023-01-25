@@ -35,7 +35,7 @@ if (pushOverUserToken && pushOverAppToken) {
       message: `The file "${filename}" has been downloaded on your server`
     })
   })
-  client.getEventEmitter().on('downloaded', (filename) => {
+  client.getEventEmitter().on('download', (filename) => {
     pusher.send({
       title: 'Download started !',
       message: `The file "${filename}" is being downloaded on your server`

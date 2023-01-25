@@ -35,7 +35,7 @@ ALLDEBRID_TOKEN=allbredid-token  TORRENT_FOLDER=path/to/torrents DOWNLOAD_FOLDER
 
 ### Launching script with docker
 ``` bash
-docker run -v path/tot/torrent:/torrents -v path/to/download:/downloads -e ALLDEBRID_TOKEN=allbredid-token vlacour97/alldebrid-watcher
+docker run -v path/tot/torrent:/torrents -v path/to/download:/downloads -e ALLDEBRID_TOKEN=allbredid-token vlacour97/alldebrid-watcher:1.1.1
 ```
 
 ## Env variables configuration
