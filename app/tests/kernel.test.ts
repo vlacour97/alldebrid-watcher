@@ -31,10 +31,10 @@ describe(Kernel.name, () => {
     })
 
 
-    test('init', () => {
+    test('init', async () => {
         jest.spyOn(process, 'on')
 
-        kernel.init();
+        await kernel.init();
 
         expect(debrider.initialize).toBeCalled();
         expect(downloader.initialize).toBeCalled();
@@ -94,12 +94,14 @@ describe(Kernel.name, () => {
         expect(downloadFile.on).toHaveBeenNthCalledWith(4, DownloadEvent.DONE, expect.anything())
     })
 
-    test('exit', () => {
+    test('exit', async () => {
         jest.spyOn(process, 'exit').mockImplementation((code?: number): never => {throw new Error()})
 
-        expect(() => {
-            kernel.onExit();
-        }).toThrow()
+        try {
+            await kernel.onExit();
+        } catch (error) {
+
+        }
 
         expect(debrider.close).toBeCalled();
         expect(downloader.close).toBeCalled();

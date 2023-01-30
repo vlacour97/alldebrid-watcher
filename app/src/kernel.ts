@@ -58,10 +58,10 @@ export default class Kernel {
         this.torrentQueue = new TorrentQueue();
     }
 
-    init() {
+    async init() {
         this.watcher.initialize();
         this.debrider.initialize();
-        this.downloader.initialize();
+        await this.downloader.initialize();
         this.notifier.initialize();
 
         process.on('SIGINT', this.onExit.bind(this));
@@ -105,10 +105,10 @@ export default class Kernel {
         }, this.loopDuration)
     }
 
-    onExit() {
+    async onExit() {
         this.watcher.close();
         this.debrider.close();
-        this.downloader.close();
+        await this.downloader.close();
         this.notifier.close();
 
         process.exit(0);
