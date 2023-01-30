@@ -178,7 +178,7 @@ The options used in this command are:
 | Environment Variable | Required ? | Default value | Available values | Description |
 | --- | --- | --- | --- | --- |
 | NOTIFIER_SERVICES | No | stdout | stdout, pushover | Choice of notification services separated by a comma |
-| NOTIFIER_SERVICES_CONFIG | No | {} | **Keys**: stdout, pushover<br>**Values**: 'all' or an array with the values specified in [the table below](#Type-of-actions) | Choice of which actions should be notified on which service in JSON<br>Example:<br> `{"stdout": "all", "pushover": ["download_start", "download_done"]` |
+| NOTIFIER_SERVICES_CONFIG | No | {} | **Keys**: stdout, pushover<br>**Values**: 'all' or an array with the values specified in [the table below](#Type-of-actions) | Choice of which actions should be notified on which service in JSON<br>Example:<br> `{"stdout": "all", "pushover": ["download_start", "download_done"]}` |
 
 #### Type of actions
 | Valeur | Description |
@@ -195,7 +195,8 @@ The options used in this command are:
 No configuration possible
 
 #### Pushover
-
+> Action `download_progress` was not supported by pushover notifier.  
+  
 | Environment Variable | Required ? | Default value | Description |
 | --- | --- | --- | --- |
 | PUSHOVER_USER_TOKEN | Yes |  | [Pushover](https://pushover.net/) User Token. Set PUSHOVER_USER_TOKEN and PUSHOVER_APP_TOKEN to use pushover app to be notified when download was finish |

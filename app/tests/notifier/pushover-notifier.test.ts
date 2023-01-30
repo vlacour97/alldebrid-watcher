@@ -33,7 +33,7 @@ describe(PushoverNotifier.name, () => {
         notifier.notifyOnWatch(torrent);
 
         expect(pushoverSendMethod).toHaveBeenCalledWith({
-            title: 'New file was watched',
+            title: 'New watched file',
             message: `The file "filename" has been watched on your server`
         })
     })
@@ -47,7 +47,7 @@ describe(PushoverNotifier.name, () => {
         notifier.notifyOnDebrid(file);
 
         expect(pushoverSendMethod).toHaveBeenCalledWith({
-            title: 'New file was debrided',
+            title: 'New debrided file',
             message: `The file "filename" has been debrided on your server`
         })
     })
@@ -65,8 +65,8 @@ describe(PushoverNotifier.name, () => {
         notifier.notifyOnDownloadStart(downloadFile);
 
         expect(pushoverSendMethod).toHaveBeenCalledWith({
-            title: 'Download started',
-            message: `The download of file "filename" has been started on your server`
+            title: 'Download started !',
+            message: `The file "filename" is being downloaded on your server`
         })
     })
 
@@ -120,7 +120,7 @@ describe(PushoverNotifier.name, () => {
         notifier.notifyOnDownloadDone(downloadFile);
 
         expect(pushoverSendMethod).toHaveBeenCalledWith({
-            title: 'Download finish',
+            title: 'File downloaded !',
             message: `The file "filename" has been downloaded on your server`
         })
     })

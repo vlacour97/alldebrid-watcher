@@ -43,22 +43,22 @@ export default class PushoverNotifier implements NotifierInterface {
 
     notifyOnWatch(torrent: Torrent): void {
         this.pusher.send({
-            title: 'New file was watched',
+            title: 'New watched file',
             message: `The file "${torrent.name}" has been watched on your server`
         })
     }
 
     notifyOnDebrid(file: File): void {
         this.pusher.send({
-            title: 'New file was debrided',
+            title: 'New debrided file',
             message: `The file "${file.filename}" has been debrided on your server`
         })
     }
 
     notifyOnDownloadStart(downloadFile: DownloadFile): void {
         this.pusher.send({
-            title: 'Download started',
-            message: `The download of file "${downloadFile.file.filename}" has been started on your server`
+            title: 'Download started !',
+            message: `The file "${downloadFile.file.filename}" is being downloaded on your server`
         })
     }
 
@@ -68,7 +68,7 @@ export default class PushoverNotifier implements NotifierInterface {
 
     notifyOnDownloadDone(downloadFile: DownloadFile): void {
         this.pusher.send({
-            title: 'Download finish',
+            title: 'File downloaded !',
             message: `The file "${downloadFile.file.filename}" has been downloaded on your server`
         })
     }

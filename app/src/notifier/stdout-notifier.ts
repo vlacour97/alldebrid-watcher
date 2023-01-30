@@ -19,7 +19,7 @@ export default class StdoutNotifier implements NotifierInterface {
     }
 
     notifyOnDownloadStart(downloadFile: DownloadFile): void {
-        console.log(`The download of file "${downloadFile.file.filename}" has been started on your server`)
+        console.log(`The file "${downloadFile.file.filename}" is being downloaded on your server`)
     }
 
     notifyOnDownloadProgress(downloadFile: DownloadFile, progress: number): void {
