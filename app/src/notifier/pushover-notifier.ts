@@ -32,8 +32,8 @@ export default class PushoverNotifier implements NotifierInterface {
     constructor(userToken: string, appToken: string) {
         const Push = require('pushover-notifications')
         this.pusher = new Push({
-            userToken,
-            appToken
+            user: userToken,
+            token: appToken
         })
     }
 
