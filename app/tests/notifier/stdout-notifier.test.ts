@@ -63,7 +63,7 @@ describe(StdoutNotifier.name, () => {
 
         notifier.notifyOnDownloadStart(downloadFile);
 
-        expect(console.log).toHaveBeenCalledWith('The download of file "filename" has been started on your server')
+        expect(console.log).toHaveBeenCalledWith('The file "filename" is being downloaded on your server')
     })
 
     test('notifyOnDownloadProgress', () => {
