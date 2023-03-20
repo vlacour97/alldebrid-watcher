@@ -67,9 +67,9 @@ Possible notification types:
 * The download encountered an error
 
 Available Notifiers:
-* **Stdout**: Log les action dans la sortie standard de la console
+* **Stdout**: Log action in console
 * **Pushover**: Sends notifications using the [Pushover](https://pushover.net/) service
-* Coming soon
+* **Webhook**: Send HTTP POST Request to server endpoint
 
 > **Multiple notifiers can be used at the same time**  
 > Each notifier can inform of different actions (example: Stdout => verbose mode + Pushover => Downloads started, Downloads finished)
@@ -177,7 +177,7 @@ The options used in this command are:
 
 | Environment Variable | Required ? | Default value | Available values | Description |
 | --- | --- | --- | --- | --- |
-| NOTIFIER_SERVICES | No | stdout | stdout, pushover | Choice of notification services separated by a comma |
+| NOTIFIER_SERVICES | No | stdout | stdout, pushover, webhook | Choice of notification services separated by a comma |
 | NOTIFIER_SERVICES_CONFIG | No | {} | **Keys**: stdout, pushover<br>**Values**: 'all' or an array with the values specified in [the table below](#Type-of-actions) | Choice of which actions should be notified on which service in JSON<br>Example:<br> `{"stdout": "all", "pushover": ["download_start", "download_done"]}` |
 
 #### Type of actions
@@ -201,6 +201,22 @@ No configuration possible
 | --- | --- | --- | --- |
 | PUSHOVER_USER_TOKEN | Yes |  | [Pushover](https://pushover.net/) User Token. Set PUSHOVER_USER_TOKEN and PUSHOVER_APP_TOKEN to use pushover app to be notified when download was finish |
 | PUSHOVER_APP_TOKEN | Yes |  | [Pushover](https://pushover.net/) App Token. Set PUSHOVER_USER_TOKEN and PUSHOVER_APP_TOKEN to use pushover app to be notified when download was finish |
+
+#### Webhook
+> Action `download_progress` was not supported by webhook notifier.
+
+| Environment Variable | Required ? | Default value | Description |
+| --- | --- | --- | --- |
+| WEBHOOK_ENDPOINT | Yes |  | Endpoint to notify |
+
+Example request payload:
+```json
+{
+  "action": "download_start",
+  "file": "file.txt",
+  "url": "https://th4ykc.debrid.it/dl/2pc1bty56aa/file.txt"
+}
+```
 
 ## Licence
 

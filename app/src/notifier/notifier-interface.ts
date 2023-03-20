@@ -4,7 +4,8 @@ import Torrent from "../torrent/torrent";
 
 export enum NotifierType {
     PUSHOVER = 'pushover',
-    STDOUT = 'stdout'
+    STDOUT = 'stdout',
+    WEBHOOK = 'webhook'
 }
 
 export default interface NotifierInterface {
