@@ -7,7 +7,7 @@ import {DownloadFile} from "../file/download-file";
 import {ServiceLabel} from "../dependency-injection/app-container";
 import Container from "../dependency-injection/container";
 
-type NotificationType = "watch"|"debrid"|"download_start"|"download_progress"|"download_done"|"download_error"
+export type NotificationType = "watch"|"debrid"|"download_start"|"download_progress"|"download_done"|"download_error"
 
 type NotifierServiceConfig = {
     [key: string]: "all"|NotificationType[]
