@@ -29,15 +29,15 @@ export default class DownloaderStrategy implements DownloaderInterface {
         this.downloaderContainer = downloaderContainer;
     }
 
-    initialize(): void {
-        this.downloaderContainer.get(this.downloaderType).initialize()
+    async initialize(): Promise<void> {
+        await this.downloaderContainer.get(this.downloaderType).initialize()
     }
 
     getDownloadFile(file: File): DownloadFile {
         return this.downloaderContainer.get(this.downloaderType).getDownloadFile(file);
     }
 
-    close(): void {
-        this.downloaderContainer.get(this.downloaderType).close()
+    async close(): Promise<void> {
+        await this.downloaderContainer.get(this.downloaderType).close()
     }
 }

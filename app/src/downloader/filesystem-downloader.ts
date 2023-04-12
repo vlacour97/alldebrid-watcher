@@ -36,7 +36,7 @@ export default class FilesystemDownloader implements DownloaderInterface {
         this.downloadProcess = {};
     }
 
-    initialize(): void {
+    async initialize(): Promise<void> {
         if (!fs.existsSync(this.downloadFolder)){
             fs.mkdirSync(this.downloadFolder);
         }
@@ -77,6 +77,6 @@ export default class FilesystemDownloader implements DownloaderInterface {
         this.downloadProcess[processId] = downloadProcess;
     }
 
-    close(): void {
+    async close(): Promise<void> {
     }
 }

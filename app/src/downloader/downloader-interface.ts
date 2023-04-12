@@ -2,11 +2,12 @@ import File from "../file/file";
 import {DownloadFile} from "../file/download-file";
 
 export enum DownloaderType {
-    FILESYSTEM = 'filesystem'
+    FILESYSTEM = 'filesystem',
+    SYNOLOGY_DS = 'synology_ds',
 }
 
 export default interface DownloaderInterface {
-    initialize(): void
+    initialize(): Promise<void>
     getDownloadFile(file: File): DownloadFile
-    close(): void
+    close(): Promise<void>
 }
