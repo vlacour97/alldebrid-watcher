@@ -49,7 +49,7 @@ Downloads a file transformed by the debrider
 
 Available Downloaders:
 * **FileSystem**: Uses node JS to download the file locally
-* Coming soon
+* **QNAP Download Station**: Use unofficial API for QNAP Download Station
 
 > Only one downloader can be used at a time
 
@@ -166,12 +166,27 @@ The options used in this command are:
 
 ### Downloader
 
+| Environment Variable | Required ? | Default value | Available values | Description                    |
+| --- | --- |---------------| --- |--------------------------------|
+| DOWNLOADER_SERVICE | No | filesystem    | filesystem, qnap_download_station | Choice of the download service |
+
+
 #### Filesystem
 
 | Environment Variable | Required ? | Default value | Description |
 | --- | --- | --- | --- |
 | DOWNLOAD_FOLDER | No | /downloads | Path to the folder where the files are downloaded |
 | MAX_PARALLELS_DOWNLOADS | No | 5 | Number of parallel downloads |
+
+#### QNAP Download Station
+
+| Environment Variable | Required ? | Default value | Description                                         |
+|----------------------|------------|---------------|-----------------------------------------------------|
+| QNAP_ENDPOINT        | Yes        |               | Url of QNAP server. eg: http://localhost:8080       |
+| QNAP_USERNAME        | Yes         | admin         | Username of QNAP user                               |
+| QNAP_PASSWORD        | Yes         |    password           | Password of QNAP user                               |
+| TEMPORARY_FOLDER        | Yes         |               | Temporary folder use by download station            |
+| DOWNLOAD_FOLDER        | Yes         |               | Download destination folder use by download station |
 
 ### Notifier
 

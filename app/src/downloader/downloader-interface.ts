@@ -2,7 +2,8 @@ import File from "../file/file";
 import {DownloadFile} from "../file/download-file";
 
 export enum DownloaderType {
-    FILESYSTEM = 'filesystem'
+    FILESYSTEM = 'filesystem',
+    QNAP_DOWNLOAD_STATION = 'qnap_download_station'
 }
 
 export default interface DownloaderInterface {
