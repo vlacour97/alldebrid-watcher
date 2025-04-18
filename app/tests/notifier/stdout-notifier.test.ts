@@ -4,6 +4,7 @@ import {mock} from "jest-mock-extended";
 import Torrent from "../../src/torrent/torrent";
 import File from "../../src/file/file";
 import {DownloadFile} from "../../src/file/download-file";
+import FileList from "../../src/file/file-list";
 
 describe(StdoutNotifier.name, () => {
     let notifier: StdoutNotifier;
@@ -101,6 +102,21 @@ describe(StdoutNotifier.name, () => {
         expect(console.log).toHaveBeenCalledWith('An error has occured of the downloading of the file "filename" => error_message')
     })
 
+    test('notifyOnTorrentError', () => {
+        const torrent: Torrent = mock<Torrent>();
+        const files: FileList = mock<FileList>();
+        const error: Error = mock<Error>();
+
+        // @ts-ignore
+        torrent.name = 'foo'
+
+        error.message = 'error_message'
+
+        notifier.notifyOnTorrentError(torrent, files, error);
+
+        expect(console.log).toHaveBeenCalledWith('An error has occured of the downloading of the torrent "foo" => error_message')
+    })
+
     test('notifyOnDownloadDone', () => {
         const downloadFile: DownloadFile = mock<DownloadFile>();
         const file: File = mock<File>();
@@ -114,6 +130,17 @@ describe(StdoutNotifier.name, () => {
         notifier.notifyOnDownloadDone(downloadFile);
 
         expect(console.log).toHaveBeenCalledWith('The file "filename" has been downloaded on your server')
+    })
+
+    test('notifyOnTorrentDone', () => {
+        const torrent: Torrent = mock<Torrent>();
+
+        // @ts-ignore
+        torrent.name = 'foo';
+
+        notifier.notifyOnTorrentDone(torrent);
+
+        expect(console.log).toHaveBeenCalledWith('The torrent "foo" has been downloaded on your server')
     })
 
     test('close', () => {

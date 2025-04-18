@@ -59,7 +59,7 @@ export default class Kernel {
     }
 
     init() {
-        this.watcher.initialize();
+        this.watcher.initialize(this.torrentQueue);
         this.debrider.initialize();
         this.downloader.initialize();
         this.notifier.initialize();
@@ -77,30 +77,49 @@ export default class Kernel {
                 this.notifier.notifyOnWatch(torrent)
 
                 const files = await this.debrider.getDebridedFiles(torrent)
+                const filesTreatmentPromises: Promise<void>[] = [];
 
                 files.forEach((file: File) => {
                     this.notifier.notifyOnDebrid(file)
 
-                    const downloadFile = this.downloader.getDownloadFile(file);
-                    downloadFile.on(
-                        DownloadEvent.START_DOWNLOAD,
-                        (downloadFile: DownloadFile) => this.notifier.notifyOnDownloadStart(downloadFile)
-                    )
-                    downloadFile.on(
-                        DownloadEvent.PROGRESS,
-                        (downloadFile: DownloadFile, progress: number) => this.notifier.notifyOnDownloadProgress(downloadFile, progress)
-                    )
-                    downloadFile.on(
-                        DownloadEvent.ERROR,
-                        (downloadFile: DownloadFile, error: Error) => this.notifier.notifyOnDownloadError(downloadFile, error)
-                    )
-                    downloadFile.on(
-                        DownloadEvent.DONE,
-                        (downloadFile: DownloadFile) => this.notifier.notifyOnDownloadDone(downloadFile)
-                    )
+                    filesTreatmentPromises.push(new Promise((resolve, reject) => {
+                        const downloadFile = this.downloader.getDownloadFile(file);
+                        downloadFile.on(
+                            DownloadEvent.START_DOWNLOAD,
+                            (downloadFile: DownloadFile) => this.notifier.notifyOnDownloadStart(downloadFile)
+                        )
+                        downloadFile.on(
+                            DownloadEvent.PROGRESS,
+                            (downloadFile: DownloadFile, progress: number) => this.notifier.notifyOnDownloadProgress(downloadFile, progress)
+                        )
+                        downloadFile.on(
+                            DownloadEvent.ERROR,
+                            (downloadFile: DownloadFile, error: Error) => {
+                                this.notifier.notifyOnDownloadError(downloadFile, error);
+                                reject(error);
+                            }
+                        )
+                        downloadFile.on(
+                            DownloadEvent.DONE,
+                            (downloadFile: DownloadFile) => {
+                                this.notifier.notifyOnDownloadDone(downloadFile);
+                                resolve();
+                            }
+                        )
 
-                    downloadFile.startDownload();
+                        downloadFile.startDownload();
+                    }));
                 })
+
+                Promise.all(filesTreatmentPromises)
+                    .then(() => {
+                        this.notifier.notifyOnTorrentDone(torrent, files);
+                        this.torrentQueue.evacuate(torrent);
+                    })
+                    .catch((error) => {
+                        this.notifier.notifyOnTorrentError(torrent, files, error);
+                        this.torrentQueue.evacuate(torrent);
+                    })
             }
         }, this.loopDuration)
     }

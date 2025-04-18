@@ -28,8 +28,8 @@ export default class WatcherStrategy implements WatcherInterface {
         this.watcherContainer = watcherContainer;
     }
 
-    initialize(): void {
-        this.watcherContainer.get(this.watcherType).initialize();
+    initialize(torrentQueue: TorrentQueue): void {
+        this.watcherContainer.get(this.watcherType).initialize(torrentQueue);
     }
 
     start(torrentQueue: TorrentQueue): void {

@@ -4,6 +4,7 @@ import Torrent from "../../src/torrent/torrent";
 import File from "../../src/file/file";
 import {DownloadFile} from "../../src/file/download-file";
 import PushoverNotifier from "../../src/notifier/pushover-notifier";
+import FileList from "../../src/file/file-list";
 
 jest.mock('pushover-notifications');
 describe(PushoverNotifier.name, () => {
@@ -107,6 +108,23 @@ describe(PushoverNotifier.name, () => {
         })
     })
 
+    test('notifyOnTorrentError', () => {
+        const torrent: Torrent = mock<Torrent>();
+        const files: FileList = mock<FileList>();
+        const error: Error = mock<Error>();
+
+        // @ts-ignore
+        torrent.name = 'filename'
+        error.message = 'error_message'
+
+        notifier.notifyOnTorrentError(torrent, files, error);
+
+        expect(pushoverSendMethod).toHaveBeenCalledWith({
+            title: 'Download error',
+            message: `An error has occured of the downloading of the torrent "filename" => error_message`
+        })
+    })
+
     test('notifyOnDownloadDone', () => {
         const downloadFile: DownloadFile = mock<DownloadFile>();
         const file: File = mock<File>();
@@ -122,6 +140,20 @@ describe(PushoverNotifier.name, () => {
         expect(pushoverSendMethod).toHaveBeenCalledWith({
             title: 'File downloaded !',
             message: `The file "filename" has been downloaded on your server`
+        })
+    })
+
+    test('notifyOnTorrentDone', () => {
+        const torrent: Torrent = mock<Torrent>();
+
+        // @ts-ignore
+        torrent.name = 'filename'
+
+        notifier.notifyOnTorrentDone(torrent);
+
+        expect(pushoverSendMethod).toHaveBeenCalledWith({
+            title: 'Torrent downloaded !',
+            message: `The torrent "filename" has been downloaded on your server`
         })
     })
 

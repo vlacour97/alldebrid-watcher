@@ -1,13 +1,13 @@
 import WatcherInterface, {WatcherType} from "./watcher-interface";
-import TorrentQueue from "../torrent/torrent-queue";
+import TorrentQueue, {TorrentQueueEvent} from "../torrent/torrent-queue";
 import watch from "node-watch";
 import * as fs from "fs";
+import {FSWatcher} from "fs";
 import Torrent from "../torrent/torrent";
 import TorrentList from "../torrent/torrent-list";
 import TorrentFile from "../torrent/torrent-file";
 import Watcher from "./decorator/watcher";
-import {FSWatcher} from "fs";
-import {ServiceParamType} from "../dependency-injection/param-provider";
+import {ServiceParamFilters, ServiceParamType} from "../dependency-injection/param-provider";
 
 @Watcher(
     WatcherType.FILESYSTEM,
@@ -16,20 +16,37 @@ import {ServiceParamType} from "../dependency-injection/param-provider";
             id: 'TORRENT_FOLDER',
             type: ServiceParamType.ENVIRONMENT_VARIABLE,
             default: '/torrents'
+        },
+        {
+            id: 'REMOVE_TORRENT_AFTER_DOWNLOAD',
+            type: ServiceParamType.ENVIRONMENT_VARIABLE,
+            filter: ServiceParamFilters.BOOLEAN,
+            default: false
         }
     ]
 )
 export default class FilesystemWatcher implements WatcherInterface {
-    private readonly torrentPath: string
     private watcher: FSWatcher
 
-    constructor(torrentPath: string) {
-        this.torrentPath = torrentPath;
+    constructor(
+        private readonly torrentPath: string,
+        private readonly removeAfterDownload: boolean
+    ) {
     }
 
-    initialize(): void {
+    initialize(torrentQueue: TorrentQueue): void {
         if (!fs.existsSync(this.torrentPath)){
             fs.mkdirSync(this.torrentPath);
+        }
+
+        if (this.removeAfterDownload) {
+            torrentQueue.on(TorrentQueueEvent.EVACUATE, (torrent) => {
+                fs.unlink(torrent.file.fileName, (err) => {
+                    if (null !== err) {
+                        console.error(err);
+                    }
+                });
+            })
         }
     }
 

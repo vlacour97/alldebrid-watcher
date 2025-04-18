@@ -6,8 +6,9 @@ import File from "../file/file";
 import {DownloadFile} from "../file/download-file";
 import {ServiceLabel} from "../dependency-injection/app-container";
 import Container from "../dependency-injection/container";
+import FileList from "../file/file-list";
 
-type NotificationType = "watch"|"debrid"|"download_start"|"download_progress"|"download_done"|"download_error"
+export type NotificationType = "watch"|"debrid"|"download_start"|"download_progress"|"download_done"|"torrent_done"|"download_error"|"torrent_error"
 
 type NotifierServiceConfig = {
     [key: string]: "all"|NotificationType[]
@@ -91,10 +92,26 @@ export class NotifierStrategy implements NotifierInterface {
         }
     }
 
+    notifyOnTorrentDone(file: Torrent, files: FileList): void {
+        for (const notifierName of this.notifierList) {
+            if (this.notifyService(notifierName, 'torrent_done')) {
+                this.notifierContainer.get(notifierName).notifyOnTorrentDone(file, files)
+            }
+        }
+    }
+
     notifyOnDownloadError(downloadFile: DownloadFile, error: Error): void {
         for (const notifierName of this.notifierList) {
             if (this.notifyService(notifierName, 'download_error')) {
                 this.notifierContainer.get(notifierName).notifyOnDownloadError(downloadFile, error)
+            }
+        }
+    }
+
+    notifyOnTorrentError(file: Torrent, files: FileList, error: Error): void {
+        for (const notifierName of this.notifierList) {
+            if (this.notifyService(notifierName, 'torrent_error')) {
+                this.notifierContainer.get(notifierName).notifyOnTorrentError(file, files, error)
             }
         }
     }
