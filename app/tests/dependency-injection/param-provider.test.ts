@@ -15,6 +15,8 @@ describe(ParamProvider.name, () => {
         process.env.ENV_VARIABLE_FOO = 'toto';
         process.env.ENV_VARIABLE_FOO_LIST = 'foo,foo1';
         process.env.ENV_VARIABLE_FOO_JSON = '{"toto": "foo"}';
+        process.env.ENV_VARIABLE_FOO_BOOL_TRUE = 'true';
+        process.env.ENV_VARIABLE_FOO_BOOL_FALSE = 'false';
 
         let params = provider.transformParams([
             {
@@ -35,14 +37,26 @@ describe(ParamProvider.name, () => {
                 id: 'ENV_VARIABLE_FOO_JSON',
                 type: ServiceParamType.ENVIRONMENT_VARIABLE,
                 filter: ServiceParamFilters.JSON
+            },
+            {
+                id: 'ENV_VARIABLE_FOO_BOOL_TRUE',
+                type: ServiceParamType.ENVIRONMENT_VARIABLE,
+                filter: ServiceParamFilters.BOOLEAN
+            },
+            {
+                id: 'ENV_VARIABLE_FOO_BOOL_FALSE',
+                type: ServiceParamType.ENVIRONMENT_VARIABLE,
+                filter: ServiceParamFilters.BOOLEAN
             }
         ])
 
-        expect(params).toHaveLength(4);
+        expect(params).toHaveLength(6);
         expect(params[0]).toEqual('toto');
         expect(params[1]).toEqual('variable');
         expect(params[2]).toEqual(['foo', 'foo1']);
         expect(params[3]).toEqual({toto: 'foo'});
+        expect(params[4]).toEqual(true);
+        expect(params[5]).toEqual(false);
     })
 
     test('transformParams (type variable)', () => {

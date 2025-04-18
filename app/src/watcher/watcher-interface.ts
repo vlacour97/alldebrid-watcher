@@ -5,7 +5,7 @@ export enum WatcherType {
 }
 
 export default interface WatcherInterface {
-    initialize(): void
+    initialize(torrentQueue: TorrentQueue): void
     start(torrentQueue: TorrentQueue): void
     stop(): void
     close(): void

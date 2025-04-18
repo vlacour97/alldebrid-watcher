@@ -16,13 +16,14 @@ describe(WatcherStrategy.name, () => {
 
     test('initialize', () => {
         const subWatcher: WatcherInterface = mock<WatcherInterface>();
+        const torrentQueue: TorrentQueue = mock<TorrentQueue>();
 
         jest.spyOn(container, 'get').mockReturnValue(subWatcher)
 
-        watcher.initialize();
+        watcher.initialize(torrentQueue);
 
         expect(container.get).toHaveBeenCalledWith('toto');
-        expect(subWatcher.initialize).toHaveBeenCalled()
+        expect(subWatcher.initialize).toHaveBeenCalledWith(torrentQueue);
     })
 
     test('getDebridedFiles', () => {

@@ -22,4 +22,8 @@ export default class FileList {
     forEach (callable): void {
         this.elements.forEach(callable)
     }
+
+    map(callback: (element: File) => void): any {
+        return this.elements.map(callback);
+    }
 }

@@ -4,6 +4,7 @@ import {DownloadFile} from "../file/download-file";
 import Notifier from "./decorator/notifier";
 import {ServiceParamType} from "../dependency-injection/param-provider";
 import Torrent from "../torrent/torrent";
+import FileList from "../file/file-list";
 
 type Pusher = {
     constructor: (options: object) => object,
@@ -30,7 +31,7 @@ export default class PushoverNotifier implements NotifierInterface {
     private pusher: Pusher
 
     constructor(userToken: string, appToken: string) {
-        const Push = require('pushover-notifications')
+            const Push = require('pushover-notifications')
         this.pusher = new Push({
             user: userToken,
             token: appToken
@@ -73,10 +74,25 @@ export default class PushoverNotifier implements NotifierInterface {
         })
     }
 
+    notifyOnTorrentDone(file: Torrent): void {
+        this.pusher.send({
+            title: 'Torrent downloaded !',
+            message: `The torrent "${file.name}" has been downloaded on your server`,
+
+        })
+    }
+
     notifyOnDownloadError(downloadFile: DownloadFile, error: Error): void {
         this.pusher.send({
             title: 'Download error',
             message: `An error has occured of the downloading of the file "${downloadFile.file.filename}" => ${error.message}`
+        })
+    }
+
+    notifyOnTorrentError(file: Torrent, files: FileList, error: Error): void {
+        this.pusher.send({
+            title: 'Download error',
+            message: `An error has occured of the downloading of the torrent "${file.name}" => ${error.message}`
         })
     }
 

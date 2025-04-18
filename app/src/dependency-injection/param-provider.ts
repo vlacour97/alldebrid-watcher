@@ -8,7 +8,8 @@ export enum ServiceParamType {
 
 export enum ServiceParamFilters {
     SPLIT_COMMA_SEPARATOR,
-    JSON
+    JSON,
+    BOOLEAN
 }
 
 export type ServiceParam = {
@@ -52,6 +53,11 @@ export default class ParamProvider {
                 case ServiceParamFilters.JSON:
                     if ('string' === typeof classParam) {
                         classParam = JSON.parse(classParam)
+                    }
+                    break;
+                case ServiceParamFilters.BOOLEAN:
+                    if ('string' === typeof classParam) {
+                        classParam = 'true' === classParam
                     }
                     break;
             }

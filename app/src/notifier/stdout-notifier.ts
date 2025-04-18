@@ -3,6 +3,7 @@ import File from "../file/file";
 import {DownloadFile} from "../file/download-file";
 import Notifier from "./decorator/notifier";
 import Torrent from "../torrent/torrent";
+import FileList from "../file/file-list";
 
 @Notifier(NotifierType.STDOUT)
 export default class StdoutNotifier implements NotifierInterface {
@@ -34,8 +35,16 @@ export default class StdoutNotifier implements NotifierInterface {
         console.log(`The file "${downloadFile.file.filename}" has been downloaded on your server`)
     }
 
+    notifyOnTorrentDone(file: Torrent): void {
+        console.log(`The torrent "${file.name}" has been downloaded on your server`)
+    }
+
     notifyOnDownloadError(downloadFile: DownloadFile, error: Error): void {
         console.log(`An error has occured of the downloading of the file "${downloadFile.file.filename}" => ${error.message}`)
+    }
+
+    notifyOnTorrentError(file: Torrent, files: FileList, error: Error): void {
+        console.log(`An error has occured of the downloading of the torrent "${file.name}" => ${error.message}`)
     }
 
     close(): void {

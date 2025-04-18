@@ -67,8 +67,9 @@ Possible notification types:
 * The download encountered an error
 
 Available Notifiers:
-* **Stdout**: Log les action dans la sortie standard de la console
+* **Stdout**: Log event in standard out
 * **Pushover**: Sends notifications using the [Pushover](https://pushover.net/) service
+* **Webhook**: Sends POST HTTP request on event
 * Coming soon
 
 > **Multiple notifiers can be used at the same time**  
@@ -151,9 +152,10 @@ The options used in this command are:
 
 #### Filesystem
 
-| Environment Variable | Required ? | Default value | Description |
-| --- | --- | --- | --- |
-| TORRENT_FOLDER | No | /torrents | Path to the folder containing the torrent files |
+| Environment Variable | Required ? | Default value | Description                                         |
+| --- | --- |---------------|-----------------------------------------------------|
+| TORRENT_FOLDER | No | /torrents     | Path to the folder containing the torrent files     |
+| REMOVE_TORRENT_AFTER_DOWNLOAD | No | false         | Determine if torrent must be removed after download |
 
 ### Debrider
 
@@ -190,20 +192,22 @@ The options used in this command are:
 
 ### Notifier
 
-| Environment Variable | Required ? | Default value | Available values | Description |
-| --- | --- | --- | --- | --- |
-| NOTIFIER_SERVICES | No | stdout | stdout, pushover | Choice of notification services separated by a comma |
+| Environment Variable | Required ? | Default value | Available values                                                                                                             | Description |
+| --- | --- | --- |------------------------------------------------------------------------------------------------------------------------------| --- |
+| NOTIFIER_SERVICES | No | stdout | stdout, pushover,webhook                                                                                                     | Choice of notification services separated by a comma |
 | NOTIFIER_SERVICES_CONFIG | No | {} | **Keys**: stdout, pushover<br>**Values**: 'all' or an array with the values specified in [the table below](#Type-of-actions) | Choice of which actions should be notified on which service in JSON<br>Example:<br> `{"stdout": "all", "pushover": ["download_start", "download_done"]}` |
 
 #### Type of actions
-| Valeur | Description |
-| --- | --- |
-| **watch** | A torrent or magnet file was found  |
-| **debrid** | A torrent or magnet file was debrid  |
-| **download_start** | The download of a file has begun  |
-| **download_progress** | Download progress (x% downloaded) |
-| **download_done** | The download is complete  |
-| **download_error** | The download encounters an error |
+| Valeur                | Description                                |
+|-----------------------|--------------------------------------------|
+| **watch**             | A torrent or magnet file was found         |
+| **debrid**            | A torrent or magnet file was debrid        |
+| **download_start**    | The download of a file has begun           |
+| **download_progress** | Download progress (x% downloaded)          |
+| **download_done**     | The download is complete                   |
+| **torrent_done**      | The torrent's download is complete         |
+| **download_error**    | The download encounters an error           |
+| **torrent_error**     | The torrent's download encounters an error |
 
 #### Stdout
 
@@ -216,6 +220,14 @@ No configuration possible
 | --- | --- | --- | --- |
 | PUSHOVER_USER_TOKEN | Yes |  | [Pushover](https://pushover.net/) User Token. Set PUSHOVER_USER_TOKEN and PUSHOVER_APP_TOKEN to use pushover app to be notified when download was finish |
 | PUSHOVER_APP_TOKEN | Yes |  | [Pushover](https://pushover.net/) App Token. Set PUSHOVER_USER_TOKEN and PUSHOVER_APP_TOKEN to use pushover app to be notified when download was finish |
+
+#### Webhook
+> Action `download_progress` was not supported by webhook notifier.
+
+| Environment Variable | Required ? | Default value | Description                                                  |
+|----------------------| --- | --- |--------------------------------------------------------------|
+| WEBHOOK_ENDPOINT     | Yes |  | URL of webhook endpoint. POST request was sended when notify |
+
 
 ## Licence
 
