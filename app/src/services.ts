@@ -3,6 +3,7 @@ import AllDebridDebrider from "./debrider/all-debrid-debrider";
 import FilesystemDownloader from "./downloader/filesystem-downloader";
 import PushoverNotifier from "./notifier/pushover-notifier";
 import StdoutNotifier from "./notifier/stdout-notifier";
+import QnapDownloadStationDownloader from "./downloader/qnap-download-station-downloader";
 
 /**
  * Declaration of services
@@ -16,7 +17,8 @@ const services = {
         AllDebridDebrider
     },
     downloader: {
-        FilesystemDownloader
+        FilesystemDownloader,
+        QnapDownloadStationDownloader
     },
     notifier: {
         PushoverNotifier,
