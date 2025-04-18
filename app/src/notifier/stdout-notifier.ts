@@ -23,8 +23,10 @@ export default class StdoutNotifier implements NotifierInterface {
     }
 
     notifyOnDownloadProgress(downloadFile: DownloadFile, progress: number): void {
-        process.stdout.clearLine(0);
-        process.stdout.cursorTo(0);
+        if (undefined !== process.stdout.clearLine && undefined !== process.stdout.cursorTo) {
+            process.stdout.clearLine(0);
+            process.stdout.cursorTo(0);
+        }
         process.stdout.write(`Downloading of file "${downloadFile.file.filename}": ${progress}%\r`);
     }
 
