@@ -14,11 +14,13 @@ describe(AllDebridClient.name, () => {
             'http://allDebridHost.com',
             '/uploadTorrentFileURI',
             '/uploadMagnetURI',
+            '/removeMagnetURI',
             '/magnetStatusURI',
             '/linkUnlockURI',
             'userAgent'
         )
         client.apiKey = 'apiKey'
+        mockedAxios.mockReset();
     })
 
     test('putTorrentFile', async () => {
@@ -116,6 +118,25 @@ describe(AllDebridClient.name, () => {
         expect(response).toEqual(null);
         expect(mockedAxios.get).toHaveBeenCalledWith(
             'http://allDebridHost.com/magnetStatusURI?agent=userAgent&apikey=apiKey&id=12'
+        )
+    })
+
+    test('removeMagnet', async () => {
+
+        // @ts-ignore
+        mockedAxios.get.mockResolvedValue({
+            data: {
+                status: 'success',
+                data: {
+                    message: 'Magnet was successfully deleted'
+                }
+            }
+        })
+
+        await client.removeMagnet(1234);
+
+        expect(mockedAxios.get).toHaveBeenCalledWith(
+            'http://allDebridHost.com/removeMagnetURI?agent=userAgent&apikey=apiKey&id=1234'
         )
     })
 

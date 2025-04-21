@@ -4,6 +4,7 @@ import Container from "../../src/dependency-injection/container";
 import {mock} from "jest-mock-extended";
 import DebriderInterface from "../../src/debrider/debrider-interface";
 import Torrent from "../../src/torrent/torrent";
+import TorrentQueue from "../../src/torrent/torrent-queue";
 
 describe(DebriderStrategy.name, () => {
     let container: Container;
@@ -16,13 +17,14 @@ describe(DebriderStrategy.name, () => {
 
     test('initialize', () => {
         const subDebrider: DebriderInterface = mock<DebriderInterface>();
+        const torrentQueue = mock<TorrentQueue>();
 
         jest.spyOn(container, 'get').mockReturnValue(subDebrider)
 
-        debrider.initialize();
+        debrider.initialize(torrentQueue);
 
         expect(container.get).toHaveBeenCalledWith('toto');
-        expect(subDebrider.initialize).toHaveBeenCalled()
+        expect(subDebrider.initialize).toHaveBeenCalledWith(torrentQueue)
     })
 
     test('getDebridedFiles', () => {

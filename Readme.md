@@ -161,10 +161,11 @@ The options used in this command are:
 
 #### AllDebrid
 
-| Environment Variable | Required ? | Default value | Description |
-| --- | --- | --- | --- |
-| ALLDEBRID_TOKEN | Yes |  | AllDebrid API key |
-| AUTHORIZED_EXTENSIONS | No | null | List of authorized extensions for download separated by a comma (example: avi,mkv,..) |
+| Environment Variable | Required ? | Default value | Description                                                                           |
+| --- | --- |---------------|---------------------------------------------------------------------------------------|
+| ALLDEBRID_TOKEN | Yes |               | AllDebrid API key                                                                     |
+| AUTHORIZED_EXTENSIONS | No | null          | List of authorized extensions for download separated by a comma (example: avi,mkv,..) |
+| CLEAN_MAGNETS_AFTER_DOWNLOAD | No | false         | Determine if torrent or magnet must be deleted from alldebrid                         |
 
 ### Downloader
 

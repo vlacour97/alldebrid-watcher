@@ -60,7 +60,7 @@ export default class Kernel {
 
     init() {
         this.watcher.initialize(this.torrentQueue);
-        this.debrider.initialize();
+        this.debrider.initialize(this.torrentQueue);
         this.downloader.initialize();
         this.notifier.initialize();
 
