@@ -5,6 +5,7 @@ import FileList from "../file/file-list";
 import Debrider from "./decorator/debrider";
 import {ServiceParamFilters, ServiceParamType} from "../dependency-injection/param-provider";
 import AllDebridClient, {MagnetType, UnlockFile} from "./all-debrid/all-debrid-client";
+import TorrentQueue, {TorrentQueueEvent} from "../torrent/torrent-queue";
 
 @Debrider(
     DebriderType.ALL_DEBRID,
@@ -20,6 +21,12 @@ import AllDebridClient, {MagnetType, UnlockFile} from "./all-debrid/all-debrid-c
             default: null
         },
         {
+            id: 'CLEAN_MAGNETS_AFTER_DOWNLOAD',
+            type: ServiceParamType.ENVIRONMENT_VARIABLE,
+            filter: ServiceParamFilters.BOOLEAN,
+            default: false
+        },
+        {
             id: AllDebridClient.name,
             type: ServiceParamType.INJECTABLE_SERVICE
         }
@@ -28,16 +35,29 @@ import AllDebridClient, {MagnetType, UnlockFile} from "./all-debrid/all-debrid-c
 export default class AllDebridDebrider implements DebriderInterface {
     private readonly token: string
     private readonly authorizedExtensions: string[]|null
+    private readonly clearMagnetAfterDownload: boolean
     private readonly client: AllDebridClient
+    private readonly magnetMapping: {[key: string]: number} = {}
 
-    constructor(token: string, authorizedExtensions: string[]|null, client: AllDebridClient) {
+    constructor(token: string, authorizedExtensions: string[]|null, clearMagnetAfterDownload: boolean, client: AllDebridClient) {
         this.token = token;
         this.authorizedExtensions = authorizedExtensions;
+        this.clearMagnetAfterDownload = clearMagnetAfterDownload;
         this.client = client;
     }
 
-    initialize(): void {
+    initialize(torrentQueue: TorrentQueue): void {
         this.client.apiKey = this.token;
+
+        torrentQueue.on(TorrentQueueEvent.EVACUATE, (torrent) => {
+            if (undefined !== this.magnetMapping[torrent.uuid]) {
+                if (this.clearMagnetAfterDownload) {
+                    this.client.removeMagnet(this.magnetMapping[torrent.uuid])
+                }
+                delete this.magnetMapping[torrent.uuid];
+            }
+
+        })
     }
 
     private async putTorrent(torrent: Torrent): Promise<null|number> {
@@ -83,6 +103,8 @@ export default class AllDebridDebrider implements DebriderInterface {
 
                 files.add(new File(unlockFile.link, unlockFile.filename));
             }
+
+            this.magnetMapping[torrent.uuid] = magnetId;
 
             resolve(files);
         })

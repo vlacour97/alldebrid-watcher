@@ -5,6 +5,7 @@ import {ServiceLabel} from "../dependency-injection/app-container";
 import Torrent from "../torrent/torrent";
 import Container from "../dependency-injection/container";
 import FileList from "../file/file-list";
+import TorrentQueue from "../torrent/torrent-queue";
 
 @Service(
     DebriderStrategy.name,
@@ -29,8 +30,8 @@ export default class DebriderStrategy implements DebriderInterface {
         this.debriderContainer = debriderContainer;
     }
 
-    initialize(): void {
-        this.debriderContainer.get(this.debriderType).initialize();
+    initialize(torrentQueue: TorrentQueue): void {
+        this.debriderContainer.get(this.debriderType).initialize(torrentQueue);
     }
 
     getDebridedFiles(torrent: Torrent): Promise<FileList> {

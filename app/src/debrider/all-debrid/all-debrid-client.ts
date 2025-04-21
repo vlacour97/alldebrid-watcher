@@ -50,6 +50,10 @@ export type UnlockFile = {
             type: ServiceParamType.VALUE
         },
         {
+            id: '/magnet/delete',
+            type: ServiceParamType.VALUE
+        },
+        {
             id: '/magnet/status',
             type: ServiceParamType.VALUE
         },
@@ -64,21 +68,18 @@ export type UnlockFile = {
     ]
 )
 export default class AllDebridClient {
-    private readonly allDebridHost: string
-    private readonly uploadTorrentFileURI: string
-    private readonly uploadMagnetURI: string
-    private readonly magnetStatusURI: string
-    private readonly linkUnlockURI: string
-    private readonly userAgent: string
     private _apiKey: string
 
-    constructor(allDebridHost: string, uploadTorrentFileURI: string, uploadMagnetURI: string, magnetStatusURI: string, linkUnlockURI: string, userAgent: string) {
-        this.allDebridHost = allDebridHost;
-        this.uploadTorrentFileURI = uploadTorrentFileURI;
-        this.uploadMagnetURI = uploadMagnetURI;
-        this.magnetStatusURI = magnetStatusURI;
-        this.linkUnlockURI = linkUnlockURI;
-        this.userAgent = userAgent;
+    constructor(
+        private readonly allDebridHost: string,
+        private readonly uploadTorrentFileURI: string,
+        private readonly uploadMagnetURI: string,
+        private readonly removeMagnetURI: string,
+        private readonly magnetStatusURI: string,
+        private readonly linkUnlockURI: string,
+        private readonly userAgent: string
+    ) {
+
     }
 
     set apiKey(value: string) {
@@ -128,6 +129,10 @@ export default class AllDebridClient {
         }
 
         return null
+    }
+
+    async removeMagnet(magnetId: number): Promise<void> {
+        await axios.get(this.getUrl(this.removeMagnetURI, {'id': magnetId}));
     }
 
     async getUnlockFile (link: string): Promise<UnlockFile> {
