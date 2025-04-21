@@ -182,13 +182,14 @@ The options used in this command are:
 
 #### QNAP Download Station
 
-| Environment Variable | Required ? | Default value | Description                                         |
-|----------------------|------------|---------------|-----------------------------------------------------|
-| QNAP_ENDPOINT        | Yes        |               | Url of QNAP server. eg: http://localhost:8080       |
-| QNAP_USERNAME        | Yes         | admin         | Username of QNAP user                               |
-| QNAP_PASSWORD        | Yes         |    password           | Password of QNAP user                               |
-| TEMPORARY_FOLDER        | Yes         |               | Temporary folder use by download station            |
-| DOWNLOAD_FOLDER        | Yes         |               | Download destination folder use by download station |
+| Environment Variable | Required ? | Default value  | Description                                         |
+|----------------------|---------|----------------|-----------------------------------------------------|
+| QNAP_ENDPOINT        | Yes     |                | Url of QNAP server. eg: http://localhost:8080       |
+| QNAP_USERNAME        | Yes     | admin          | Username of QNAP user                               |
+| QNAP_PASSWORD        | Yes     | password       | Password of QNAP user                               |
+| TEMPORARY_FOLDER        | Yes     |                | Temporary folder use by download station            |
+| DOWNLOAD_FOLDER        | Yes     |                | Download destination folder use by download station |
+| QNAP_SESSION_TIMEOUT        | No      | 1200 (20 min.) | Max timeout in seconds of QNAP user session         |
 
 ### Notifier
 
