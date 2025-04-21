@@ -21,6 +21,11 @@ import CachedQnapClient from "./qnap/cached-qnap-client";
             type: ServiceParamType.ENVIRONMENT_VARIABLE,
         },
         {
+            id: 'QNAP_SESSION_TIMEOUT',
+            type: ServiceParamType.ENVIRONMENT_VARIABLE,
+            default: 1200
+        },
+        {
             id: CachedQnapClient.name,
             type: ServiceParamType.INJECTABLE_SERVICE
         }
@@ -30,6 +35,7 @@ export default class QnapDownloadStationDownloader implements DownloaderInterfac
     constructor(
         private readonly temporaryFolder: string,
         private readonly downloadFolder: string,
+        private readonly sessionTimeout: number,
         private readonly client: QnapClient,
     ) {
 
@@ -37,6 +43,10 @@ export default class QnapDownloadStationDownloader implements DownloaderInterfac
 
     initialize(): void {
         this.client.login();
+
+        setInterval(() => {
+            this.client.login();
+        }, this.sessionTimeout * 1000)
     }
 
     getDownloadFile(file: File): DownloadFile {

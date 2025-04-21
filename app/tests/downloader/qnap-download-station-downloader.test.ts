@@ -30,16 +30,20 @@ describe('QnapDownloadStationDownloader', () => {
     beforeEach(() => {
         jest.useFakeTimers();
         jest.clearAllMocks();
-        downloader = new QnapDownloadStationDownloader('/tmp', '/downloads', mockClient);
+        downloader = new QnapDownloadStationDownloader('/tmp', '/downloads', 2, mockClient);
     });
 
     afterEach(() => {
         jest.useRealTimers();
     });
 
-    it('should call client.login on initialize', () => {
+    it('should call client.login on initialize', async () => {
         downloader.initialize();
-        expect(mockLogin).toHaveBeenCalled();
+
+        jest.advanceTimersByTime(2000);
+        await Promise.resolve();
+
+        expect(mockLogin).toBeCalledTimes(2);
     });
 
     it('should return a DownloadFile with correct properties', () => {
