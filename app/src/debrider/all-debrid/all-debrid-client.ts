@@ -38,27 +38,27 @@ export type UnlockFile = {
     AllDebridClient.name,
     [
         {
-            id: 'https://api.alldebrid.com/v4',
+            id: 'https://api.alldebrid.com',
             type: ServiceParamType.VALUE
         },
         {
-            id: '/magnet/upload/file',
+            id: '/v4/magnet/upload/file',
             type: ServiceParamType.VALUE
         },
         {
-            id: '/magnet/upload',
+            id: '/v4/magnet/upload',
             type: ServiceParamType.VALUE
         },
         {
-            id: '/magnet/delete',
+            id: '/v4/magnet/delete',
             type: ServiceParamType.VALUE
         },
         {
-            id: '/magnet/status',
+            id: '/v4.1/magnet/status',
             type: ServiceParamType.VALUE
         },
         {
-            id: '/link/unlock',
+            id: '/v4/link/unlock',
             type: ServiceParamType.VALUE
         },
         {
