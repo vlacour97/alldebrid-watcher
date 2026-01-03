@@ -1,6 +1,6 @@
 DOCKER_CLI = docker
-DOCKER_RUN = $(DOCKER_CLI) run -v "$(PWD)/app:/app" -w /app node:alpine
-DOCKER_RUN_APP = $(DOCKER_CLI) run -v "$(PWD)/app:/app" -v "$(PWD)/var/torrents:/torrents" -v "$(PWD)/var/downloads:/downloads" -w /app -it debrid
+DOCKER_RUN = $(DOCKER_CLI) run -v "$(PWD)/app:/app" -w /app node:19-alpine
+DOCKER_RUN_APP = $(DOCKER_CLI) run -v "$(PWD)/app:/app" -v "$(PWD)/var/torrents:/torrents" -v "$(PWD)/var/downloads:/downloads" -w /app -it vlacour97/alldebrid-watcher
 VERSION = 'latest'
 
 help:   ## Prints help

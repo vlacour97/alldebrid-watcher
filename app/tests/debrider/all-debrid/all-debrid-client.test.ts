@@ -84,8 +84,12 @@ describe(AllDebridClient.name, () => {
                 data: {
                     magnets: {
                         statusCode: 4,
-                        links: [
-                            'http://link.com'
+                        files: [
+                            {
+                                l: 'http://link.com',
+                                n: 'filename',
+                                s: 12
+                            }
                         ]
                     }
                 }
@@ -94,7 +98,7 @@ describe(AllDebridClient.name, () => {
 
         let response = await client.getTorrentLinks(12);
 
-        expect(response).toEqual(['http://link.com']);
+        expect(response).toEqual([{filename: 'filename', link: 'http://link.com', size: 12}]);
         expect(mockedAxios.get).toHaveBeenCalledWith(
             'http://allDebridHost.com/magnetStatusURI?agent=userAgent&apikey=apiKey&id=12'
         )

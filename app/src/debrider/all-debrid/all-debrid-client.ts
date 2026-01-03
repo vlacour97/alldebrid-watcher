@@ -11,10 +11,16 @@ type MagnetResponse = {
         data: {
             magnets: {
                 statusCode: number,
-                links: MagnetType[]
+                files: FileType[]
             }
         }
     }
+}
+
+export type FileType = {
+    n: string,
+    l: string,
+    s: number
 }
 
 export type MagnetType = {
@@ -124,8 +130,14 @@ export default class AllDebridClient {
 
         const magnets = response.data.data.magnets
 
-        if (magnets.statusCode === 4) {
-            return magnets.links
+        if (magnets.statusCode === 4 && magnets.files) {
+            return magnets.files.map(
+                file => ({
+                            link: file.l,
+                            filename: file.n,
+                            size: file.s
+                        })
+            )
         }
 
         return null
